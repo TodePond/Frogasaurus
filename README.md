@@ -20,7 +20,7 @@ deno compile --unstable --allow-read=. --allow-write=. make.js
 ```
 
 # Flags
-You can give flags to your files, so that Frogasaurus knows what to do with them.<br>
+You can give flags to your source files, so that Frogasaurus knows what to do with them.<br>
 For example, a file named `greet.js` has no flags.<br>
 You can name it `greet-module.js` instead, to give it the `module` flag.<br>
 Files can have multiple flags. For example, `greet-footer-module.js` has the `footer` and `module` flags.
