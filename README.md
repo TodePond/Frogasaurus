@@ -1,3 +1,4 @@
+<img align="right" height="100" src="http://todepond.com/IMG/RibbitTode.png">
 # Frogasaurus
 Frogasaurus is a template for making a javascript project.<br>
 It lets you make a project that is compatible with traditional HTML script tag imports, as well as ES module imports.<br>
