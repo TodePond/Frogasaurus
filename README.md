@@ -14,6 +14,11 @@ By the way, you could use this command to run the `make.js` file securely:
 deno run --allow-read=. --allow-write=. make.js
 ```
 
+Or you could use this command to make an executable `make.exe` program:
+```
+deno compile --unstable --allow-read=. --allow-write=. make.js
+```
+
 # Flags
 You can give flags to your files, so that Frogasaurus knows what to do with them.<br>
 For example, a file named `greet.js` has no flags.<br>
