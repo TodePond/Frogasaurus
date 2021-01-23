@@ -1,8 +1,21 @@
 # Frogasaurus
 Frogasaurus is a template for making a javascript project.<br>
-It lets your project be compatible with traditional HTML script tag imports, as well as ES module imports.<br>
+It lets you make a project that is compatible with traditional HTML script tag imports, as well as ES module imports.<br>
 
 # How does it work?
 Write your code inside the `source` folder.<br>
 Then run the `make.js` file with [Deno](https://deno.land).<br>
 Your bundled project will appear inside the `build` folder.<br>
+
+# Flags
+You can give flags to your files, so that Frogasaurus knows what to do with them.<br>
+For example, a file named `greet.js` has no flags.<br>
+You can name it `greet-module.js` instead, to give it the `module` flag.<br>
+Files can have multiple flags. For example, `greet-footer-module.js` has the `footer` and `module` flags.
+
+These are the different flags you can use:
+| Flag | Description | 
+|----------|------------------------------------------------------|
+| `module` | The code in this file is only inserted into modules. | 
+| `header` | The code in this file is placed at the start.        |
+| `footer` | The code in this file is placed at the end.          |
