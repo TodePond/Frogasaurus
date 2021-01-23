@@ -5,7 +5,12 @@ It lets you make a project that is compatible with traditional HTML script tag i
 # How does it work?
 Write your code inside the `source` folder.<br>
 Then run the `make.js` file with [Deno](https://deno.land).<br>
-Your bundled project will appear inside the `build` folder.<br>
+Your bundled project will appear inside the `build` folder.
+
+By the way, you could use this command to run the `make.js` file securely:
+```
+deno run --allow-read=. --allow-write=. make.js
+```
 
 # Flags
 You can give flags to your files, so that Frogasaurus knows what to do with them.<br>
@@ -19,3 +24,6 @@ These are the different flags you can use:
 | `module` | The code in this file is only inserted into modules. | 
 | `header` | The code in this file is placed at the start.        |
 | `footer` | The code in this file is placed at the end.          |
+
+# Examples
+There are examples in the `examples` folder to show you how to use your bundled project.<br>
