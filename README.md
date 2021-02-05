@@ -3,9 +3,9 @@
 # Frogasaurus
 Frogasaurus is a template for making a javascript project.<br>
 I made it because I wanted an easy way to make a project that can be used in any of these ways:
-* Import with the `import` keyword.
-* Embed a build file with a single `script` tag.
-* Embed source files with multiple `script` tags.
+* Importing with the `import` keyword.
+* Embedding with a single `script` tag.
+* Embedding with multiple `script` tags, without needing to re-bundle the project.
 
 # How does it work?
 Write your code inside the `source` folder.<br>
