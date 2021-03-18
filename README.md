@@ -1,4 +1,4 @@
-<img align="right" height="100" src="http://todepond.com/IMG/frogasaurus.jpg">
+<img align="right" height="100" src="http://todepond.com/IMG/Frogasaurus@0.25x.png">
 
 # Frogasaurus
 Frogasaurus is a template for making a javascript project.<br>
