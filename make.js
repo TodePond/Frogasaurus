@@ -46,6 +46,7 @@ const readDir = async (path) => {
 		if (entry.isDirectory) await readDir(entryPath)
 		else {
 			let [name, extension] = entry.name.split(".")
+			const args = name.split("-")
 			
 			/*if (extension === "mt") {
 				const dirtySource = await readFile(entryPath)
@@ -58,8 +59,7 @@ const readDir = async (path) => {
 				extension = "js"
 				entryPath = `build/translations/` + name + ".js"
 			}*/
-			const args = name.split("-")
-			
+
 			let target = undefined
 			if (extension === "js") {
 				target = args.includes("import")? module : (args.includes("embed")? embed : base)
