@@ -17,4 +17,4 @@ Use the `-import.js` file when importing the project.<br>
 Use the `-embed.js` file when embedding the project.
 
 ## Anything else I should know?
-No.
+Yes. But it's a secret!
