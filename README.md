@@ -1,5 +1,3 @@
-# As of 17th August 2022, I'm currently redesigning + rewriting Frogasaurus. This readme might be incorrect.
-
 <img align="right" height="100" src="http://todepond.com/IMG/Frogasaurus@0.25x.png">
 
 # Frogasaurus
