@@ -1,6 +1,6 @@
-const BLUE = "color: #4680ff"
-const RED = "color: #ff4346"
-const GREEN = "color: #46ff80"
+const BLUE = "color: rgb(0, 128, 255)"
+const RED = "color: rgb(255, 70, 70)"
+const GREEN = "color: rgb(0, 255, 128)"
 const YELLOW = "color: #ffcc46"
 
 const readFile = async (path) => {
@@ -16,27 +16,29 @@ const writeFile = async (path, source) => {
 
 const readDirectory = async (path) => {
 	
-	const sources = []
+	const entries = []
 
 	for await (const entry of Deno.readDir(path)) {
 
+		const {name} = entry
+		const entryPath = `${path}/${name}`
+
 		// Go deeper if it's a directory
-		const entryPath = `${path}/${entry.name}`
 		if (entry.isDirectory) {
-			sources.push(await readDirectory(entryPath))
+			entries.push(...await readDirectory(entryPath))
 			continue
 		}
 
 		// Make sure it's a javascript file
-		const [name, extension] = entry.name.split(".")
+		const [head, extension] = name.split(".")
 		if (extension !== "js") continue
 
 		const source = await readFile(entryPath)
-		sources.push(source)
+		entries.push({source, name})
 
 	}
 
-	return sources
+	return entries
 }
 
 const trimStart = (string) => {
@@ -45,6 +47,7 @@ const trimStart = (string) => {
 		if (char === " " || char === "	") continue
 		return string.slice(i)
 	}
+	return ""
 }
 
 const getConstName = (line) => {
@@ -56,7 +59,7 @@ const getConstName = (line) => {
 	}
 }
 
-const stripSource = (source, projectName) => {
+const stripSource = (source, name) => {
 	const lines = source.split("\n")
 	const trimmedLines = lines.map(line => trimStart(line))
 	const strippedLines = []
@@ -70,9 +73,9 @@ const stripSource = (source, projectName) => {
 			const strippedLine = line.slice("export ".length + trimLength)
 			const constSnippet = strippedLine.slice(0, "const ".length)
 			if (constSnippet !== "const ") {
-				throw new Error("[Frogasaurus] Sorry, Frogasaurus only supports exports when you write 'const' immediately after.")
+				console.log(`%cError: Sorry, Frogasaurus only supports exports when you write 'const' immediately after.\n%c${name}:${i}\n\n	${line}\n`, RED, "")
+				return
 			}
-			const name = getConstName(strippedLine)
 			strippedLines.push(strippedLine)
 			continue
 		}
@@ -87,8 +90,12 @@ const buildSource = async (projectName) => {
 	
 	console.clear()
 		
-	const sources = await readDirectory("source")
-	const strippedSources = sources.map(source => stripSource(source, projectName))
+	const entries = await readDirectory("source")
+	const sources = entries.map(entry => entry.source)
+	const strippedSources = entries.map(entry => stripSource(entry.source, entry.name))
+	if (strippedSources.includes(undefined)) {
+		console.log("%cFailed build!", RED)
+	}
 	
 	const importSource = sources.join("\n")
 	const embedSource = strippedSources.join("\n")
