@@ -1,8 +1,14 @@
+//========//
+// COLOUR //
+//========//
 const BLUE = "color: rgb(0, 128, 255)"
 const RED = "color: rgb(255, 70, 70)"
 const GREEN = "color: rgb(0, 255, 128)"
 const YELLOW = "color: #ffcc46"
 
+//======//
+// FILE //
+//======//
 const readFile = async (path) => {
 	console.log(`%cReading File: ${path}`, BLUE)
 	const source = await Deno.readTextFile(path)
@@ -34,22 +40,30 @@ const readDirectory = async (path) => {
 		if (extension !== "js") continue
 
 		const source = await readFile(entryPath)
-		entries.push({source, name})
+		entries.push({source, name, path: "./" + entryPath.slice("source/".length)})
 
 	}
 
 	return entries
 }
 
+//========//
+// STRING //
+//========//
 const trimStart = (string) => {
 	for (let i = 0; i < string.length; i++) {
 		const char = string[i]
 		if (char === " " || char === "	") continue
-		return string.slice(i)
+		const trimmed = string.slice(i)
+		const trimming = string.slice(0, i)
+		return {trimmed, trimming}
 	}
-	return ""
+	return {trimmed: "", trimming: ""}
 }
 
+//=======//
+// PARSE //
+//=======//
 const getConstName = (line) => {
 	for (let i = "const ".length; i < line.length; i++) {
 		const char = line[i]
@@ -59,54 +73,239 @@ const getConstName = (line) => {
 	}
 }
 
-const stripSource = (source, name) => {
+const getImportNames = (line) => {
+	const [head, tail] = line.split("{")
+	const [inner] = tail.split("}")
+	const names = inner.split(",").map(name => name.trim())
+	return names
+}
+
+const getImportPath = (line) => {
+	const [head, tail] = line.split(" from ")
+	const [start, path, end] = tail.split(`"`)
+	return path
+}
+
+const parseExport = (line, {fileName, lineNumber}) => {
+
+	const trim = trimStart(line)
+	const {trimmed, trimming} = trim
+	const exportSnippet = trimmed.slice(0, "export ".length)
+	if (exportSnippet !== "export ") return {success: false}
+	
+	const trimLength = line.length - trimmed.length
+	const tail = line.slice("export ".length + trimLength)
+
+	const constSnippet = tail.slice(0, "const ".length)
+	if (constSnippet !== "const ") {
+		console.log(`%cError: Sorry, Frogasaurus only supports exports when you write 'const' immediately after.\n%c${fileName}:${lineNumber}\n\n	${line}\n`, RED, "")
+		return {success: false}
+	}
+
+	const name = getConstName(tail)
+	return {
+		success: true,
+		name,
+		margin: trimming,
+		tail,
+	}
+}
+
+const parseImport = (line, {fileName, lineNumber}) => {
+	const trim = trimStart(line)
+	const {trimmed, trimming} = trim
+	const importSnippet = trimmed.slice(0, "import ".length)
+	if (importSnippet !== "import ") return {success: false}
+	
+	const trimLength = line.length - trimmed.length
+	const tail = line.slice("import ".length + trimLength)
+
+	const path = getImportPath(tail)
+	const names = getImportNames(tail)
+	const output = `{ ${names.join(", ")} }`
+
+	return {
+		success: true,
+		names,
+		path,
+		output,
+		margin: trimming,
+		tail,
+	}
+}
+
+//======//
+// EMIT //
+//======//
+const HEADER_LINES = [
+	`//=============//`,
+	`// FROGASAURUS //`,
+	`//=============//`,
+	`const Frogasaurus = {}`,
+	``,
+	`//========//`,
+	`// SOURCE //`,
+	`//========//`,
+	``,
+]
+
+const FOOTER_TITLE_LINES = [
+	``,
+	``,
+	`//=========//`,
+	`// EXPORTS //`,
+	`//=========//`,
+	``,
+]
+
+const MAIN_TITLE_LINES = [
+	``,
+	``,
+	`//======//`,
+	`// MAIN //`,
+	`//======//`,
+	``,
+]
+
+const HEADER = HEADER_LINES.join("\n")
+const FOOTER_TITLE = FOOTER_TITLE_LINES.join("\n")
+const MAIN_TITLE = MAIN_TITLE_LINES.join("\n")
+
+const transpileSource = (source, name, path) => {
+
 	const lines = source.split("\n")
-	const trimmedLines = lines.map(line => trimStart(line))
+
 	const strippedLines = []
+	const exportResults = []
+	const importResults = []
+
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i]
-		const trimmedLine = trimmedLines[i]
-		const snippet = trimmedLine.slice(0, "export ".length)
+
+		const metadata = {fileName: name, lineNumber: i}
+		const exportResult = parseExport(line, metadata)
+		if (exportResult.success) {
+			strippedLines.push(`\t${exportResult.margin}${exportResult.tail}`)
+			exportResults.push(exportResult)
+			continue
+		}
 		
-		if (snippet === "export ") {
-			const trimLength = line.length - trimmedLine.length
-			const strippedLine = line.slice("export ".length + trimLength)
-			const constSnippet = strippedLine.slice(0, "const ".length)
-			if (constSnippet !== "const ") {
-				console.log(`%cError: Sorry, Frogasaurus only supports exports when you write 'const' immediately after.\n%c${name}:${i}\n\n	${line}\n`, RED, "")
-				return
-			}
-			strippedLines.push(strippedLine)
+		const importResult = parseImport(line, metadata)
+		if (importResult.success) {
+			importResults.push(importResult)
 			continue
 		}
 
-		strippedLines.push(line)
+		strippedLines.push(`\t${line}`)
 	}
 
-	return strippedLines.join("\n")
+	const exportLines = []
+	for (const exportResult of exportResults) {
+		exportLines.push(`\t\tFrogasaurus["${path}"].${exportResult.name} = ${exportResult.name}`)
+	}
+	const exportSource = exportLines.join("\n")
+	const innerSource = `\t\tFrogasaurus["${path}"] = {}\n\t${strippedLines.join("\n\t")}\n\n${exportSource}`
+	const scopedSource = `\t//====== ${path} ======\n\t{\n${innerSource}\n\t}`
+
+	return {success: true, output: scopedSource, exportResults, importResults, path}
 }
 
-const buildSource = async (projectName) => {
-	
+const build = async (projectName) => {
+
 	console.clear()
-		
-	const entries = await readDirectory("source")
-	const sources = entries.map(entry => entry.source)
-	const strippedSources = entries.map(entry => stripSource(entry.source, entry.name))
-	if (strippedSources.includes(undefined)) {
-		console.log("%cFailed build!", RED)
+	
+	if (projectName === "Frogasaurus") {
+		console.log("%cSorry, the name of your project can't be 'Frogasaurus', because it will clash with the Frogasaurus global object", RED)
+		console.log("%cPlease change the name of your folder to something else", RED)
 	}
-	
-	const importSource = sources.join("\n")
-	const embedSource = strippedSources.join("\n")
-	
-	await writeFile(`${projectName}-import.js`, importSource)
-	await writeFile(`${projectName}-embed.js`, embedSource)
+
+	const entries = await readDirectory("source")
+	const sourceResults = entries.map(entry => transpileSource(entry.source, entry.name, entry.path))
+	if (sourceResults.some(result => !result.success)) {
+		console.log("%cFailed build", RED)
+		return
+	}
+
+	// Check for duplicate export names
+	const exportNames = new Set()
+	for (const result of sourceResults) {
+		for (const exportResult of result.exportResults) {
+			if (exportNames.has(exportResult.name)) {
+				console.log("%cSorry, you can't have multiple exports with the same name", RED)
+				console.log("%cThis is because Frogasaurus mashes all your exports together <3", RED)
+				console.log(`${result.path}`)
+				console.log(`\n\t${exportResult.name}\n`)
+				console.log("%cFailed build", RED)
+				return
+			}
+			exportNames.add(exportResult.name)
+		}
+	}
+
+	// Check for 'main' function export
+	let mainFuncSource = ""
+	for (const result of sourceResults) {
+		for (const exportResult of result.exportResults) {
+			if (exportResult.name === "main") {
+				mainFuncSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main(...Deno.args)`
+			}
+		}
+	}
+
+	const exportFooterLines = sourceResults.map(result => `export const { ${result.exportResults.map(exportResult => exportResult.name).join(", ")} } = Frogasaurus["${result.path}"]`)
+	const exportFooterSource = exportFooterLines.join("\n")
+
+	const globalFooterLines = [
+		`const ${projectName} = {`,
+	]
+
+	for (const sourceResult of sourceResults) {
+		for (const exportResult of sourceResult.exportResults) {
+			globalFooterLines.push(`\t${exportResult.name}: Frogasaurus["${sourceResult.path}"].${exportResult.name},`)
+		}
+	}
+
+	globalFooterLines.push(`}`)
+	const globalFooterSource = globalFooterLines.join("\n")
+
+	const importLists = new Map()
+	for (const sourceResult of sourceResults) {
+
+		for (const importResult of sourceResult.importResults) {
+			if (importLists.get(importResult.path) === undefined) {
+				importLists.set(importResult.path, new Set())
+			}
+
+			const importList = importLists.get(importResult.path)
+			for (const name of importResult.names) {
+				importList.add(name)
+			}
+		}
+	}
+
+	const importFooterLines = []
+	for (const [path, importList] of importLists.entries()) {
+		importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = Frogasaurus["${path}"]`)
+	}
+	const importFooterSource = "\n\n" + importFooterLines.join("\n")
+
+	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "}"
+
+	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource + mainFuncSource
+	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource + mainFuncSource
+	const standaloneSource = HEADER + transpiledSource + mainFuncSource
+		
+	await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
+	await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
+	await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
 
 	console.log("%cFinished build!", YELLOW)
 	console.log("Waiting for file changes...")
 }
 
+//======//
+// MAIN //
+//======//
 const directory = Deno.cwd()
 const directoryParts = directory.split("\\")
 const projectName = directoryParts[directoryParts.length-1]
@@ -114,9 +313,9 @@ const projectName = directoryParts[directoryParts.length-1]
 await Deno.permissions.request({name: "read", path: "."})
 await Deno.permissions.request({name: "write", path: "."})
 
-await buildSource(projectName)
+await build(projectName)
 
 const watcher = Deno.watchFs("./source")
 for await (const event of watcher) {
-	await buildSource(projectName)
+	await build(projectName)
 }
