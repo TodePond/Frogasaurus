@@ -2,17 +2,21 @@
 
 # Frogasaurus
 Frogasaurus is a script for bundling a javascript library into a single file.<br>
-I made it because I wanted an easy way to make a library that can be used in either of these ways:
+I made it because I wanted an easy way to make a library that can be used in any of these ways:
 * Imported with the `import` keyword.
 * Embedded with a `script` tag.
+* Run in a terminal with `deno run`.
 
 ## How does it work?
 Write your code inside the `source` folder.<br>
-Then run the `frogasaurus.js` file with [Deno](https://deno.land).<br>
+Then run `frogasaurus.js` with [deno](https://deno.land).
 
 Your bundled project will appear!<br>
 Use the `-import.js` file when importing the project.<br>
 Use the `-embed.js` file when embedding the project.
 
+If you export a function called `main`...<br>
+An extra `-standalone.js` file will appear, that you can run in the command line with [deno](https://deno.land).<br>
+
 ## Anything else I should know?
-Yes. But it's a secret!
+Yes! There are some limitations! But it's all a secret (for now).
