@@ -45,8 +45,8 @@ frogasaurus
 ```
 
 After doing that, you should notice that two files have appeared in your folder!
-* `Hello/source/Hello-embed.js`
-* `Hello/source/Hello-import.js`
+* `Hello/source/hello-embed.js`
+* `Hello/source/hello-import.js`
 
 Each file is a different version of your library.<br>
 Each version can be used in a different way.<br>
@@ -56,7 +56,7 @@ To use the `embed` version... place it in some script tags, and call the `hello`
 
 #### `Hello/index.html`
 ```html
-<script src="Hello-embed.js"></script>
+<script src="hello-embed.js"></script>
 <script>
 
   const { hello } = Hello
@@ -84,10 +84,10 @@ deno run script.js
 Alternatively, you could use the `import` file as a javascript module:
 #### `Hello/index.html`
 ```html
-<script type="module" src="Hello-import.js"></script>
+<script type="module" src="hello-import.js"></script>
 <script type="module">
   
-	import { hello } from "./Hello-import.js"
+	import { hello } from "./hello-import.js"
 	hello()
   
 </script>
@@ -122,26 +122,26 @@ Now... when you embed or import your code, the `main` function will run.<br>
 All of these examples will print "Hello world!" to the console.
 #### `Hello/index.html`
 ```html
-<script src="Hello-embed.js"></script>
+<script src="hello-embed.js"></script>
 ```
 
 #### `Hello/script.js`
 ```js
-import { main } from "./Hello-import.js"
+import { main } from "./hello-import.js"
 ```
 
 #### `Hello/index.html`
 ```html
-<script type="module" src="Hello-import.js"></script>
+<script type="module" src="hello-import.js"></script>
 ```
 
 ## Standalone
 When you use a `main` function, an extra file gets generated!
-* `Hello/Hello-standalone.js`
+* `Hello/hello-standalone.js`
 
 You can run the `standalone` file with this command to run the `main` function:
 ```
-deno run Hello-standalone.js
+deno run hello-standalone.js
 ```
 
 Or... you could rename the `standalone` install to something convenient, like `hello.js`...
