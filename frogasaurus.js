@@ -243,11 +243,13 @@ const build = async (projectName) => {
 	}
 
 	// Check for 'main' function export
-	let mainFuncSource = ""
+	let mainFuncDenoSource = ""
+	let mainFuncWebSource = ""
 	for (const result of sourceResults) {
 		for (const exportResult of result.exportResults) {
 			if (exportResult.name === "main") {
-				mainFuncSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main(...Deno.args)`
+				mainFuncDenoSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main(...Deno.args)`
+				mainFuncWebSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main()`
 			}
 		}
 	}
@@ -291,9 +293,9 @@ const build = async (projectName) => {
 
 	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "}"
 
-	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource + mainFuncSource
-	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource + mainFuncSource
-	const standaloneSource = HEADER + transpiledSource + mainFuncSource
+	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource + mainFuncWebSource
+	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource + mainFuncWebSource
+	const standaloneSource = HEADER + transpiledSource + mainFuncDenoSource
 		
 	await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
 	await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
