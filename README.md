@@ -18,5 +18,8 @@ Use the `-embed.js` file when embedding the project.
 If you export a function called `main`...<br>
 An extra `-standalone.js` file will appear, that you can run in the command line with [deno](https://deno.land).<br>
 
+## What? I don't understand?
+Check out the [Hello World Guide](docs/hello-world-long.md).
+
 ## Anything else I should know?
 Yes! There are some limitations! But it's all a secret (for now).
