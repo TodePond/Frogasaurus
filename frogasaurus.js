@@ -293,8 +293,8 @@ const build = async (projectName) => {
 
 	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "}"
 
-	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource + mainFuncWebSource
-	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource + mainFuncWebSource
+	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource //+ mainFuncWebSource
+	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource //+ mainFuncWebSource
 	const standaloneSource = HEADER + transpiledSource + mainFuncDenoSource
 		
 	await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
