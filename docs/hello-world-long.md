@@ -124,7 +124,7 @@ You can run the `main` function with this command:<br>
 deno run hello-standalone.js
 ```
 
-Or... you could rename the `standalone` install to something convenient, like `hello.js`...
+Or... you could rename the `standalone` file to something convenient, like `hello.js`...<br>
 And then install it with this command:
 ```
 deno install hello.js
