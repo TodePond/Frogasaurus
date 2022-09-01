@@ -104,12 +104,10 @@ Then you can run a local server with this command:
 file_server
 ```
 
-## Main function
+## Standalone
 But wait, there's more!
 
 If you export a function called `main`, something special happens!<br>
-The `main` function runs whenever your library gets imported/embedded!
-
 Let's change our code to this:
 #### `Hello/source/hello.js`
 ```js
@@ -118,28 +116,10 @@ export const main = () => {
 }
 ```
 
-Now... when you embed or import your code, the `main` function will run.<br>
-All of these examples will print "Hello world!" to the console.
-#### `Hello/index.html`
-```html
-<script src="hello-embed.js"></script>
-```
-
-#### `Hello/script.js`
-```js
-import { main } from "./hello-import.js"
-```
-
-#### `Hello/index.html`
-```html
-<script type="module" src="hello-import.js"></script>
-```
-
-## Standalone
-When you use a `main` function, an extra file gets generated!
+Wow! An extra file gets generated!
 * `Hello/hello-standalone.js`
 
-You can run the `standalone` file with this command to run the `main` function:
+You can run the `main` function with this command:<br>
 ```
 deno run hello-standalone.js
 ```
