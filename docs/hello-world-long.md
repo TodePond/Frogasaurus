@@ -45,8 +45,8 @@ frogasaurus
 ```
 
 After doing that, you should notice that two files have appeared in your folder!
-* `Hello/source/hello-embed.js`
-* `Hello/source/hello-import.js`
+* `Hello/hello-embed.js`
+* `Hello/hello-import.js`
 
 Each file is a different version of your library.<br>
 Each version can be used in a different way.<br>
