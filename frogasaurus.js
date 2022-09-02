@@ -61,6 +61,11 @@ const trimStart = (string) => {
 	return {trimmed: "", trimming: ""}
 }
 
+const capitalise = (string) => {
+	const [head, ...tail] = string.split("")
+	return `${head.toUpperCase()}${tail.join("")}`
+}
+
 //=======//
 // PARSE //
 //=======//
@@ -137,11 +142,13 @@ const parseImport = (line, {fileName, lineNumber}) => {
 //======//
 // EMIT //
 //======//
-const HEADER_LINES = [
+const HEADER_TITLE_LINES = [
 	`//=============//`,
 	`// FROGASAURUS //`,
 	`//=============//`,
-	`const Frogasaurus = {}`,
+	``,
+]
+const SOURCE_TITLE_LINES = [
 	``,
 	`//========//`,
 	`// SOURCE //`,
@@ -167,12 +174,14 @@ const MAIN_TITLE_LINES = [
 	``,
 ]
 
-const HEADER = HEADER_LINES.join("\n")
+const HEADER_TITLE = HEADER_TITLE_LINES.join("\n")
+const SOURCE_TITLE = SOURCE_TITLE_LINES.join("\n")
 const FOOTER_TITLE = FOOTER_TITLE_LINES.join("\n")
 const MAIN_TITLE = MAIN_TITLE_LINES.join("\n")
 
-const transpileSource = (source, name, path) => {
+const transpileSource = (source, name, path, projectName) => {
 
+	const fileConstantName = `${capitalise(projectName)}Frogasaurus`
 	const lines = source.split("\n")
 
 	const strippedLines = []
@@ -201,10 +210,10 @@ const transpileSource = (source, name, path) => {
 
 	const exportLines = []
 	for (const exportResult of exportResults) {
-		exportLines.push(`\t\tFrogasaurus["${path}"].${exportResult.name} = ${exportResult.name}`)
+		exportLines.push(`\t\t${fileConstantName}["${path}"].${exportResult.name} = ${exportResult.name}`)
 	}
 	const exportSource = exportLines.join("\n")
-	const innerSource = `\t\tFrogasaurus["${path}"] = {}\n\t${strippedLines.join("\n\t")}\n\n${exportSource}`
+	const innerSource = `\t\t${fileConstantName}["${path}"] = {}\n\t${strippedLines.join("\n\t")}\n\n${exportSource}`
 	const scopedSource = `\t//====== ${path} ======\n\t{\n${innerSource}\n\t}`
 
 	return {success: true, output: scopedSource, exportResults, importResults, path}
@@ -214,13 +223,10 @@ const build = async (projectName) => {
 
 	console.clear()
 	
-	if (projectName === "Frogasaurus") {
-		console.log("%cSorry, the name of your project can't be 'Frogasaurus', because it will clash with the Frogasaurus global object", RED)
-		console.log("%cPlease change the name of your folder to something else", RED)
-	}
-
+	const fileConstantName = `${capitalise(projectName)}Frogasaurus`
+	
 	const entries = await readDirectory("source")
-	const sourceResults = entries.map(entry => transpileSource(entry.source, entry.name, entry.path))
+	const sourceResults = entries.map(entry => transpileSource(entry.source, entry.name, entry.path, projectName))
 	if (sourceResults.some(result => !result.success)) {
 		console.log("%cFailed build", RED)
 		return
@@ -244,26 +250,24 @@ const build = async (projectName) => {
 
 	// Check for 'main' function export
 	let mainFuncDenoSource = ""
-	let mainFuncWebSource = ""
 	for (const result of sourceResults) {
 		for (const exportResult of result.exportResults) {
 			if (exportResult.name === "main") {
-				mainFuncDenoSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main(...Deno.args)`
-				mainFuncWebSource = `${MAIN_TITLE}Frogasaurus["${result.path}"].main()`
+				mainFuncDenoSource = `${MAIN_TITLE}${fileConstantName}["${result.path}"].main(...Deno.args)`
 			}
 		}
 	}
 
-	const exportFooterLines = sourceResults.map(result => `export const { ${result.exportResults.map(exportResult => exportResult.name).join(", ")} } = Frogasaurus["${result.path}"]`)
+	const exportFooterLines = sourceResults.map(result => `export const { ${result.exportResults.map(exportResult => exportResult.name).join(", ")} } = ${fileConstantName}["${result.path}"]`)
 	const exportFooterSource = exportFooterLines.join("\n")
 
 	const globalFooterLines = [
-		`const ${projectName} = {`,
+		`const ${capitalise(projectName)} = {`,
 	]
 
 	for (const sourceResult of sourceResults) {
 		for (const exportResult of sourceResult.exportResults) {
-			globalFooterLines.push(`\t${exportResult.name}: Frogasaurus["${sourceResult.path}"].${exportResult.name},`)
+			globalFooterLines.push(`\t${exportResult.name}: ${fileConstantName}["${sourceResult.path}"].${exportResult.name},`)
 		}
 	}
 
@@ -287,15 +291,17 @@ const build = async (projectName) => {
 
 	const importFooterLines = []
 	for (const [path, importList] of importLists.entries()) {
-		importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = Frogasaurus["${path}"]`)
+		importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = ${fileConstantName}["${path}"]`)
 	}
 	const importFooterSource = "\n\n" + importFooterLines.join("\n")
 
 	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "}"
 
-	const importSource = HEADER + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource //+ mainFuncWebSource
-	const embedSource = HEADER + transpiledSource + FOOTER_TITLE + globalFooterSource //+ mainFuncWebSource
-	const standaloneSource = HEADER + transpiledSource + mainFuncDenoSource
+	const headerLine = `const ${fileConstantName} = {}\n`
+
+	const importSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource
+	const embedSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + globalFooterSource
+	const standaloneSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + mainFuncDenoSource
 		
 	await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
 	await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
