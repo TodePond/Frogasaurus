@@ -64,3 +64,6 @@ Then, you can call the `main` function from the command line:
 ```
 hello
 ```
+
+## Now what?
+Maybe... explore more [guides](guides.md)?
