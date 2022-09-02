@@ -40,7 +40,8 @@ Use the `embed` version like this:
 ```
 
 Use the `import` version like this:
-```html
+#### `Hello/script.js`
+```js
 import { hello } from "./hello-import.js"
 hello()
 ```
