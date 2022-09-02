@@ -71,7 +71,7 @@ To use the `import` version... import it like this:
 
 #### `Hello/script.js`
 ```js
-import { hello } from "./Hello-import.js`
+import { hello } from "./hello-import.js`
 hello()
 ```
 
@@ -80,16 +80,14 @@ You could run `script.js` with this command:
 deno run script.js
 ```
 
-## Using the library (module)
-Alternatively, you could use the `import` file as a javascript module:
-#### `Hello/index.html`
+Or you use it from within a module:
+#### `Hello/index.html
 ```html
-<script type="module" src="hello-import.js"></script>
 <script type="module">
-  
+	
 	import { hello } from "./hello-import.js"
 	hello()
-  
+	
 </script>
 ```
 
