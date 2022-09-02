@@ -11,7 +11,7 @@ deno install --allow-write=. --allow-read=. https://deno.land/x/frogasaurus/frog
 ## Writing the code
 Write all your code in a folder named `source`.<br>
 
-#### `HelloWorld/source/hello.js`
+#### `Hello/source/hello.js`
 ```js
 export const hello = () => {
   console.log("Hello world!")
