@@ -80,9 +80,10 @@ You could run `script.js` with this command:
 deno run script.js
 ```
 
-Or you use it from within a module:
-#### `Hello/index.html
+Or you could use the library from within a module:
+#### `Hello/index.html`
 ```html
+<script type="module" src="hello-import.js"></script>
 <script type="module">
 	
 	import { hello } from "./hello-import.js"
