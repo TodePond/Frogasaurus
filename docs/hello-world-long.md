@@ -1,6 +1,6 @@
 # Hello World Guide (long version)
 This is a long-winded guide on how to make your first library with Frogasaurus!<br>
-A shorter version is *coming soon-ish*.
+A shorter version is available [here](hello-world-short.md).
 
 ## Installing
 Before you start, you might need to install [deno](https://deno.land) (if you haven't already).
