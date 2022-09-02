@@ -295,7 +295,7 @@ const build = async (projectName) => {
 	}
 	const importFooterSource = "\n\n" + importFooterLines.join("\n")
 
-	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "}"
+	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "\n\n}"
 
 	const headerLine = `const ${fileConstantName} = {}\n`
 
