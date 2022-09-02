@@ -1,7 +1,7 @@
 # Arguments Guide
 Standalone frogasaurus libraries can take arguments.<br>
 
-# Single Argument
+## Single Argument
 Let's make a library that says hello to a given name.
 
 #### `Greeter/source/greet.js`
