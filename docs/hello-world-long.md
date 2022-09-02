@@ -133,3 +133,7 @@ This lets you use your library from the command line:
 ```
 hello
 ```
+
+## Now what?
+I don't know! It's up to you.<br>
+Want to check out the full list of [guides](guides.md)?
