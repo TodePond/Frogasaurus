@@ -1,4 +1,4 @@
- # Hello World Guide (long version)
+ # Hello World Guide (short version)
 This is a short guide on how to make your first library with Frogasaurus!<br>
 A longer version is available [here](hello-world-long.md).
 
