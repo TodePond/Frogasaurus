@@ -2,7 +2,7 @@
 Standalone frogasaurus libraries can take arguments.<br>
 Let's make a library that says hello to a given name.
 
-### Greeter/source/greet.js
+#### `Greeter/source/greet.js`
 ```js
 export const main = (name) => {
   console.log(`Hello ${name}!`)
