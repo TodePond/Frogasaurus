@@ -1,5 +1,6 @@
 # Arguments Guide
 Standalone frogasaurus libraries can take arguments.<br>
+Wait - did you want to know about Frogasaurus's own arguments? There's a guide for that [here](arguments-frogasaurus.md)!
 
 ## Single Argument
 Let's make a library that says hello to a given name.
