@@ -4,3 +4,4 @@ Here are some guides on how to use Frogasaurus:
 * [Hello World Guide (**short** version)](hello-world-short.md)
 * [**Frogasaurus** Arguments Guide](arguments-frogasaurus.md)
 * [**Custom** Arguments Guide](arguments.md)
+* [Updating Frogasaurus](updating-frogasaurus.md)
