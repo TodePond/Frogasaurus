@@ -175,12 +175,15 @@ const FrogasaurusFrogasaurus = {}
 			if (options.build === "all") {
 				await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
 				await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-				await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+				if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
 			} else if (options.build === "import") {
 				await writeFile(`${projectName.toLowerCase()}.js`, importSource)
 			} else if (options.build === "embed") {
 				await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
 			} else if (options.build === "standalone") {
+				if (mainFuncDenoSource === "") {
+					console.log(`%cCan't build 'standalone' project, because no exported 'main' function was found :(`, RED)
+				}
 				await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
 			}
 		
@@ -396,7 +399,7 @@ const FrogasaurusFrogasaurus = {}
 	const { capitalise, trimStart } = FrogasaurusFrogasaurus["./string.js"]
 	const { readDirectory, writeFile } = FrogasaurusFrogasaurus["./file.js"]
 	const { parseExport, parseImport } = FrogasaurusFrogasaurus["./parse.js"]
-	const { BLUE, RED, GREEN, YELLOW } = FrogasaurusFrogasaurus["./colour.js"]
+	const { RED, YELLOW, BLUE, GREEN } = FrogasaurusFrogasaurus["./colour.js"]
 	const { build } = FrogasaurusFrogasaurus["./build.js"]
 
 }

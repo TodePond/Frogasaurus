@@ -1,6 +1,7 @@
 import { capitalise } from "./string.js"
 import { readDirectory, writeFile } from "./file.js"
 import { parseExport, parseImport } from "./parse.js"
+import { RED, YELLOW } from "./colour.js"
 
 const HEADER_TITLE_LINES = [
 	`//=============//`,
@@ -166,12 +167,15 @@ export const build = async (projectName, options) => {
 	if (options.build === "all") {
 		await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
 		await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-		await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+		if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
 	} else if (options.build === "import") {
 		await writeFile(`${projectName.toLowerCase()}.js`, importSource)
 	} else if (options.build === "embed") {
 		await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
 	} else if (options.build === "standalone") {
+		if (mainFuncDenoSource === "") {
+			console.log(`%cCan't build 'standalone' project, because no exported 'main' function was found :(`, RED)
+		}
 		await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
 	}
 
