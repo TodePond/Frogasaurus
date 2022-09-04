@@ -9,7 +9,7 @@ I made it because I wanted an easy way to make a library that can be used in any
 
 ## How does it work?
 Write your code inside the `source` folder.<br>
-Then run `frogasaurus.js` with [deno](https://deno.land).
+Then use the `frogasaurus` command in the root folder.
 
 Your bundled project will appear!<br>
 Use the `-import.js` file when importing the project.<br>
@@ -18,8 +18,14 @@ Use the `-embed.js` file when embedding the project.
 If you export a function called `main`...<br>
 An extra `-standalone.js` file will appear, that you can run in the command line with [deno](https://deno.land).<br>
 
+## How do I install it?
+Run this command using [deno](https://deno.land/):
+```
+deno install --allow-write=. --allow-read=. frogasaurus.js
+```
+
 ## What? I don't understand?
-Check out the [Hello World Guide](docs/hello-world.md).
+Check out the [Hello World Guide](docs/hello-world.md) (or other [guides](docs/guides.md)).
 
 ## Anything else I should know?
-Yes! There are some limitations! But it's all a secret (for now).
+Yes! There are many limitations! But it's all a secret (for now).
