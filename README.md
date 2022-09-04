@@ -24,7 +24,7 @@ An extra `-standalone.js` file will appear, that you can run in the command line
 ## How do I install it?
 Run this command using [deno](https://deno.land/):
 ```
-deno install --allow-write=. --allow-read=. https://deno.land/x/frogasaurus/frogasaurus.js
+deno install --allow-write=. --allow-read=. https://deno.land/x/frogasaurus@v0.3.1/frogasaurus.js
 ```
 
 ## What? I don't understand?
