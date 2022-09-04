@@ -24,7 +24,13 @@ Run this command using [deno](https://deno.land/):
 deno install --allow-write=. --allow-read=. frogasaurus.js
 ```
 
+## What? I don't understand?
+Check out the [Hello World Guide](docs/hello-world.md) (or other [guides](docs/guides.md)).
+
 ## How do I build it?
+If you want to use Frogasaurus, you don't need to build it - just [install it](#how-do-i-install-it).<br>
+But if you want to develop Frogasaurus you need to know this:
+
 Frogasaurus is built with Frogasaurus.<br>
 So, if you're developing Frogasaurus, write your code in the `source` folder.<br>
 And then run this command to build it:
@@ -33,8 +39,5 @@ And then run this command to build it:
 frogasaurus --build standalone
 ```
 
-## What? I don't understand?
-Check out the [Hello World Guide](docs/hello-world.md) (or other [guides](docs/guides.md)).
-
 ## Anything else I should know?
-Yes! There are many limitations! But it's all a secret (for now).
+Yes! There are many limitations and [problems](https://github.com/TodePond/Frogasaurus/issues)! But it's all a secret.
