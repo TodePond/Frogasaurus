@@ -188,7 +188,7 @@ const FrogasaurusFrogasaurus = {}
 			}
 		
 			console.log("%cFinished build!", YELLOW)
-			console.log("Waiting for file changes...")
+			if (options.watch) console.log("Waiting for file changes...")
 		}
 
 		FrogasaurusFrogasaurus["./build.js"].build = build
@@ -263,6 +263,7 @@ const FrogasaurusFrogasaurus = {}
 		
 			const options = {
 				build: "all",
+				watch: false
 			}
 		
 			for (let i = 0; i < args.length; i++) {
@@ -270,6 +271,8 @@ const FrogasaurusFrogasaurus = {}
 				if (arg === "--build" || arg === "-b") {
 					const nextArg = args[i+1]
 					options.build = nextArg
+				} else if (arg === "--watch" || arg === "-w") {
+					options.watch = true
 				}
 			}
 		
@@ -282,9 +285,11 @@ const FrogasaurusFrogasaurus = {}
 		
 			await build(projectName, options)
 		
-			const watcher = Deno.watchFs("./source")
-			for await (const event of watcher) {
-				await build(projectName, options)
+			if (options.watch) {
+				const watcher = Deno.watchFs("./source")
+				for await (const event of watcher) {
+					await build(projectName, options)
+				}
 			}
 		}
 		

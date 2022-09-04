@@ -180,5 +180,5 @@ export const build = async (projectName, options) => {
 	}
 
 	console.log("%cFinished build!", YELLOW)
-	console.log("Waiting for file changes...")
+	if (options.watch) console.log("Waiting for file changes...")
 }

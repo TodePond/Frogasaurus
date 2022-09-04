@@ -4,6 +4,7 @@ export const main = async (...args) => {
 
 	const options = {
 		build: "all",
+		watch: false
 	}
 
 	for (let i = 0; i < args.length; i++) {
@@ -11,6 +12,8 @@ export const main = async (...args) => {
 		if (arg === "--build" || arg === "-b") {
 			const nextArg = args[i+1]
 			options.build = nextArg
+		} else if (arg === "--watch" || arg === "-w") {
+			options.watch = true
 		}
 	}
 
@@ -23,8 +26,10 @@ export const main = async (...args) => {
 
 	await build(projectName, options)
 
-	const watcher = Deno.watchFs("./source")
-	for await (const event of watcher) {
-		await build(projectName, options)
+	if (options.watch) {
+		const watcher = Deno.watchFs("./source")
+		for await (const event of watcher) {
+			await build(projectName, options)
+		}
 	}
 }
