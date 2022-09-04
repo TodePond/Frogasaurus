@@ -29,7 +29,7 @@ Check out the [Hello World Guide](docs/hello-world.md) (or other [guides](docs/g
 
 ## How do I build it?
 If you want to use Frogasaurus, you don't need to build it - just [install it](#how-do-i-install-it).<br>
-But if you want to develop Frogasaurus you need to know this:
+But if you want to develop Frogasaurus, you need to know this:
 
 Frogasaurus is built with Frogasaurus.<br>
 So, if you're developing Frogasaurus, write your code in the `source` folder.<br>
