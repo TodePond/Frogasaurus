@@ -1,6 +1,6 @@
 # Hello World Guide (long version)
 This is a long-winded guide on how to make your first library with Frogasaurus!<br>
-A shorter version is *coming soon-ish*.
+A shorter version is available [here](hello-world-short.md).
 
 ## Installing
 Before you start, you might need to install [deno](https://deno.land) (if you haven't already).
@@ -45,8 +45,8 @@ frogasaurus
 ```
 
 After doing that, you should notice that two files have appeared in your folder!
-* `Hello/source/hello-embed.js`
-* `Hello/source/hello-import.js`
+* `Hello/hello-embed.js`
+* `Hello/hello-import.js`
 
 Each file is a different version of your library.<br>
 Each version can be used in a different way.<br>
@@ -71,7 +71,7 @@ To use the `import` version... import it like this:
 
 #### `Hello/script.js`
 ```js
-import { hello } from "./Hello-import.js`
+import { hello } from "./hello-import.js`
 hello()
 ```
 
@@ -80,16 +80,15 @@ You could run `script.js` with this command:
 deno run script.js
 ```
 
-## Using the library (module)
-Alternatively, you could use the `import` file as a javascript module:
+Or you could use the library from within a module:
 #### `Hello/index.html`
 ```html
 <script type="module" src="hello-import.js"></script>
 <script type="module">
-  
+	
 	import { hello } from "./hello-import.js"
 	hello()
-  
+	
 </script>
 ```
 
@@ -134,3 +133,7 @@ This lets you use your library from the command line:
 ```
 hello
 ```
+
+## Now what?
+I don't know! It's up to you.<br>
+Want to check out the full list of [guides](guides.md)?
