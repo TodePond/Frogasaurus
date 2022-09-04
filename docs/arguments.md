@@ -1,4 +1,4 @@
-# Library Arguments Guide
+# Custom Arguments Guide
 Standalone frogasaurus libraries can take arguments.<br>
 Wait - did you want to know about Frogasaurus's own arguments? There's a guide for that [here](arguments-frogasaurus.md)!
 
