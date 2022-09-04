@@ -79,7 +79,7 @@ const transpileSource = (source, name, path, projectName) => {
 	return {success: true, output: scopedSource, exportResults, importResults, path}
 }
 
-export const build = async (projectName) => {
+export const build = async (projectName, options) => {
 
 	console.clear()
 	
@@ -162,10 +162,18 @@ export const build = async (projectName) => {
 	const importSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource
 	const embedSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + globalFooterSource
 	const standaloneSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + mainFuncDenoSource
-		
-	await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
-	await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-	await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+
+	if (options.build === "all") {
+		await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
+		await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
+		await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+	} else if (options.build === "import") {
+		await writeFile(`${projectName.toLowerCase()}.js`, importSource)
+	} else if (options.build === "embed") {
+		await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
+	} else if (options.build === "standalone") {
+		await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
+	}
 
 	console.log("%cFinished build!", YELLOW)
 	console.log("Waiting for file changes...")

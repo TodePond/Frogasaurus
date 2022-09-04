@@ -88,7 +88,7 @@ const FrogasaurusFrogasaurus = {}
 			return {success: true, output: scopedSource, exportResults, importResults, path}
 		}
 		
-		const build = async (projectName) => {
+		const build = async (projectName, options) => {
 		
 			console.clear()
 			
@@ -171,10 +171,18 @@ const FrogasaurusFrogasaurus = {}
 			const importSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource
 			const embedSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + globalFooterSource
 			const standaloneSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + mainFuncDenoSource
-				
-			await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
-			await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-			await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+		
+			if (options.build === "all") {
+				await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
+				await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
+				await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+			} else if (options.build === "import") {
+				await writeFile(`${projectName.toLowerCase()}.js`, importSource)
+			} else if (options.build === "embed") {
+				await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
+			} else if (options.build === "standalone") {
+				await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
+			}
 		
 			console.log("%cFinished build!", YELLOW)
 			console.log("Waiting for file changes...")
@@ -248,7 +256,20 @@ const FrogasaurusFrogasaurus = {}
 	{
 		FrogasaurusFrogasaurus["./main.js"] = {}
 		
-		const main = async () => {
+		const main = async (...args) => {
+		
+			const options = {
+				build: "all",
+			}
+		
+			for (let i = 0; i < args.length; i++) {
+				const arg = args[i]
+				if (arg === "--build" || arg === "-b") {
+					const nextArg = args[i+1]
+					options.build = nextArg
+				}
+			}
+		
 			const directory = Deno.cwd()
 			const directoryParts = directory.split("\\")
 			const projectName = directoryParts[directoryParts.length-1]
@@ -256,11 +277,11 @@ const FrogasaurusFrogasaurus = {}
 			await Deno.permissions.request({name: "read", path: "."})
 			await Deno.permissions.request({name: "write", path: "."})
 		
-			await build(projectName)
+			await build(projectName, options)
 		
 			const watcher = Deno.watchFs("./source")
 			for await (const event of watcher) {
-				await build(projectName)
+				await build(projectName, options)
 			}
 		}
 		
