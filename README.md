@@ -7,6 +7,9 @@ I made it because I wanted an easy way to make a library that can be used in any
 * Embedded with a `script` tag.
 * Run in a terminal with `deno run`.
 
+I don't intend for anyone to use Frogasaurus other than me...<br>
+But you're welcome to have-a-look or try-it if you'd like!
+
 ## How does it work?
 Write your code inside the `source` folder.<br>
 Then use the `frogasaurus` command in the root folder.
