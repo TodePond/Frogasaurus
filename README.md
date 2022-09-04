@@ -24,6 +24,15 @@ Run this command using [deno](https://deno.land/):
 deno install --allow-write=. --allow-read=. frogasaurus.js
 ```
 
+## How do I build it?
+Frogasaurus is built with Frogasaurus.<br>
+So, if you're developing Frogasaurus, write your code in the `source` folder.<br>
+And then run this command to build it:
+
+```
+frogasaurus --build standalone
+```
+
 ## What? I don't understand?
 Check out the [Hello World Guide](docs/hello-world.md) (or other [guides](docs/guides.md)).
 
