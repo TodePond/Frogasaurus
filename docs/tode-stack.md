@@ -23,6 +23,7 @@ deno install --allow-write=. --allow-read=. https://deno.land/x/frogasaurus/frog
 ```
 
 ### Step 4: Install file_server
+This will eventually be replaced by [diplodocroak](https://github.com/TodePond/ThingsIWantToMake).
 ```
 deno install --allow-read --allow-net https://deno.land/std/http/file_server.ts
 ```
