@@ -48,6 +48,7 @@ deno install --allow-read --allow-net https://deno.land/std/http/file_server.ts
 
 ## Usage
 ### Code Editor
+Open the code editor:
 ```
-code-server --auth none
+code-server --auth none --open
 ```
