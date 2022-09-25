@@ -83,7 +83,6 @@ deno run script.js
 Or you could use the library from within a module:
 #### `Hello/index.html`
 ```html
-<script type="module" src="hello-import.js"></script>
 <script type="module">
 	
 	import { hello } from "./hello-import.js"
