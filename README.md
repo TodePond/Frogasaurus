@@ -1,7 +1,7 @@
 <img align="right" height="100" src="http://todepond.com/IMG/Frogasaurus@0.25x.png">
 
 # Frogasaurus
-Frogasaurus is a script for bundling a javascript library into a single file.<br>
+Frogasaurus is a script for bundling a standalone javascript library into a single file.<br>
 I made it because I wanted an easy way to make a library that can be used in any of these ways:
 * Imported with the `import` keyword.
 * Embedded with a `script` tag.
@@ -43,4 +43,4 @@ frogasaurus --build standalone
 ```
 
 ## Anything else I should know?
-Yes! There are many limitations and [problems](https://github.com/TodePond/Frogasaurus/issues)! But it's all a secret.
+Yes! There are many limitations and problems! But it's a secret.
