@@ -7,10 +7,10 @@ Before you start, you might need to install [deno](https://deno.land) (if you ha
 
 Then, you can install Frogasaurus with this command:
 ```
-deno install --allow-write=. --allow-read=. https://deno.land/x/frogasaurus/frogasaurus.js
+deno install --allow-write --allow-read https://deno.land/x/frogasaurus/frogasaurus.js
 ```
 
-By the way, the `allow-read=.` and `allow-write=.` parts mean that you are allowing Frogasaurus to read and write in the folder that you use it.
+By the way, the `allow-read` and `allow-write` parts mean that you are allowing Frogasaurus to read and write files.
 
 ## Writing the code
 Let's make a library for a function that prints "Hello world!"<br>
