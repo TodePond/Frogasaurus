@@ -14,7 +14,7 @@ By the way, the `allow-read` and `allow-write` parts mean that you are allowing 
 
 You can update Frogasaurus to the latest version with this command:
 ```
-deno install --allow-write=. --allow-read=. --force https://deno.land/x/frogasaurus@v0.3.2/frogasaurus.js
+deno install --allow-write=. --allow-read=. --reload --force https://deno.land/x/frogasaurus/frogasaurus.js
 ```
 
 ## Writing the code
