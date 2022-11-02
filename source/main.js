@@ -18,7 +18,7 @@ export const main = async (...args) => {
 	}
 
 	const directory = Deno.cwd()
-	const directoryParts = directory.split(/[\/]/)
+	const directoryParts = directory.split(/[\\/]/)
 	const projectName = directoryParts[directoryParts.length-1]
 
 	await Deno.permissions.request({name: "read", path: "."})
