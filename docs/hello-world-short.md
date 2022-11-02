@@ -5,7 +5,7 @@ A longer version is available [here](hello-world-long.md).
 ## Installing
 Install or update Frogasaurus with [deno](https://deno.land) using this command:
 ```
-deno install --allow-write=. --allow-read=. --force https://deno.land/x/frogasaurus@/frogasaurus.js
+deno install --allow-write=. --allow-read=. --reload --force https://deno.land/x/frogasaurus/frogasaurus.js
 ```
 
 ## Writing the code
