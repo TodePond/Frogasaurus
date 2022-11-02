@@ -3,9 +3,9 @@ This is a short guide on how to make your first library with Frogasaurus!<br>
 A longer version is available [here](hello-world-long.md).
 
 ## Installing
-Install Frogasaurus with [deno](https://deno.land) using this command:
+Install or update Frogasaurus with [deno](https://deno.land) using this command:
 ```
-deno install --allow-write --allow-read https://deno.land/x/frogasaurus/frogasaurus.js
+deno install --allow-write=. --allow-read=. --force https://deno.land/x/frogasaurus@/frogasaurus.js
 ```
 
 ## Writing the code
