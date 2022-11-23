@@ -1,3 +1,5 @@
+export const HELLO: string = "Hello"
+
 export const greet = (name: string) => {
-	console.log(`Hello ${name}!`)
+	console.log(`${HELLO} ${name}!`)
 }

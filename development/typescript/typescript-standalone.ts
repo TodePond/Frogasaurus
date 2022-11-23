@@ -10,11 +10,14 @@ const TypescriptFrogasaurus: any = {}
 	//====== ./greet.ts ======
 	{
 		TypescriptFrogasaurus["./greet.ts"] = {}
+		const HELLO: string = "Hello"
+		
 		const greet = (name: string) => {
-			console.log(`Hello ${name}!`)
+			console.log(`${HELLO} ${name}!`)
 		}
 		
 
+		TypescriptFrogasaurus["./greet.ts"].HELLO = HELLO
 		TypescriptFrogasaurus["./greet.ts"].greet = greet
 	}
 

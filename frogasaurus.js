@@ -314,7 +314,7 @@ const FrogasaurusFrogasaurus = {}
 		const getConstName = (line) => {
 			for (let i = "const ".length; i < line.length; i++) {
 				const char = line[i]
-				if (char === " " || char === "	" || char === "=") {
+				if (char === " " || char === "	" || char === "=" || char === ":") {
 					return line.slice("const ".length, i)
 				}
 			}
