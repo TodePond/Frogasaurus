@@ -1,5 +1,5 @@
 import { capitalise } from "./string.js"
-import { readDirectory, writeFile } from "./file.js"
+import { getLanguageMode, readDirectory, writeFile } from "./file.js"
 import { parseExport, parseImport } from "./parse.js"
 import { RED, YELLOW } from "./colour.js"
 
@@ -151,6 +151,7 @@ export const build = async (projectName, options) => {
 	}
 
 	const importFooterLines = []
+	console.log(sourceResults)
 	for (const [path, importList] of importLists.entries()) {
 		importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = ${fileConstantName}["${path}"]`)
 	}
@@ -158,25 +159,27 @@ export const build = async (projectName, options) => {
 
 	const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "\n\n}"
 
-	const headerLine = `const ${fileConstantName} = {}\n`
+	const languageMode = getLanguageMode()
+	const headerLine = `const ${fileConstantName}${languageMode === "ts"? ": any" : ""} = {}\n`
 
 	const importSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource
 	const embedSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + globalFooterSource
 	const standaloneSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + mainFuncDenoSource
 
+	
 	if (options.build === "all") {
-		await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
-		await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-		if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+		await writeFile(`${projectName.toLowerCase()}-import.${languageMode}`, importSource)
+		await writeFile(`${projectName.toLowerCase()}-embed.${languageMode}`, embedSource)
+		if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.${languageMode}`, standaloneSource)
 	} else if (options.build === "import") {
-		await writeFile(`${projectName.toLowerCase()}.js`, importSource)
+		await writeFile(`${projectName.toLowerCase()}.${languageMode}`, importSource)
 	} else if (options.build === "embed") {
-		await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
+		await writeFile(`${projectName.toLowerCase()}.${languageMode}`, embedSource)
 	} else if (options.build === "standalone") {
 		if (mainFuncDenoSource === "") {
 			console.log(`%cCan't build 'standalone' project, because no exported 'main' function was found :(`, RED)
 		}
-		await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
+		await writeFile(`${projectName.toLowerCase()}.${languageMode}`, standaloneSource)
 	}
 
 	console.log("%cFinished build!", YELLOW)

@@ -159,6 +159,7 @@ const FrogasaurusFrogasaurus = {}
 			}
 		
 			const importFooterLines = []
+			console.log(sourceResults)
 			for (const [path, importList] of importLists.entries()) {
 				importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = ${fileConstantName}["${path}"]`)
 			}
@@ -166,25 +167,27 @@ const FrogasaurusFrogasaurus = {}
 		
 			const transpiledSource = "{\n" + sourceResults.map(result => result.output).join("\n\n") + importFooterSource + "\n\n}"
 		
-			const headerLine = `const ${fileConstantName} = {}\n`
+			const languageMode = getLanguageMode()
+			const headerLine = `const ${fileConstantName}${languageMode === "ts"? ": any" : ""} = {}\n`
 		
 			const importSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + exportFooterSource + "\n\nexport " + globalFooterSource
 			const embedSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + FOOTER_TITLE + globalFooterSource
 			const standaloneSource = HEADER_TITLE + headerLine + SOURCE_TITLE + transpiledSource + mainFuncDenoSource
 		
+			
 			if (options.build === "all") {
-				await writeFile(`${projectName.toLowerCase()}-import.js`, importSource)
-				await writeFile(`${projectName.toLowerCase()}-embed.js`, embedSource)
-				if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.js`, standaloneSource)
+				await writeFile(`${projectName.toLowerCase()}-import.${languageMode}`, importSource)
+				await writeFile(`${projectName.toLowerCase()}-embed.${languageMode}`, embedSource)
+				if (mainFuncDenoSource !== "") await writeFile(`${projectName.toLowerCase()}-standalone.${languageMode}`, standaloneSource)
 			} else if (options.build === "import") {
-				await writeFile(`${projectName.toLowerCase()}.js`, importSource)
+				await writeFile(`${projectName.toLowerCase()}.${languageMode}`, importSource)
 			} else if (options.build === "embed") {
-				await writeFile(`${projectName.toLowerCase()}.js`, embedSource)
+				await writeFile(`${projectName.toLowerCase()}.${languageMode}`, embedSource)
 			} else if (options.build === "standalone") {
 				if (mainFuncDenoSource === "") {
 					console.log(`%cCan't build 'standalone' project, because no exported 'main' function was found :(`, RED)
 				}
-				await writeFile(`${projectName.toLowerCase()}.js`, standaloneSource)
+				await writeFile(`${projectName.toLowerCase()}.${languageMode}`, standaloneSource)
 			}
 		
 			console.log("%cFinished build!", YELLOW)
@@ -223,6 +226,9 @@ const FrogasaurusFrogasaurus = {}
 			return await Deno.writeTextFile(path, source)
 		}
 		
+		let languageMode = undefined
+		const getLanguageMode = () => languageMode
+		
 		const readDirectory = async (path) => {
 			
 			const entries = []
@@ -231,7 +237,7 @@ const FrogasaurusFrogasaurus = {}
 		
 				const {name} = entry
 				const entryPath = `${path}/${name}`
-		
+				
 				// Go deeper if it's a directory
 				if (entry.isDirectory) {
 					entries.push(...await readDirectory(entryPath))
@@ -240,7 +246,10 @@ const FrogasaurusFrogasaurus = {}
 		
 				// Make sure it's a javascript file
 				const [head, extension] = name.split(".")
-				if (extension !== "js") continue
+				if (extension !== "js" && extension !== "ts") continue
+		
+				if (languageMode === undefined) languageMode = extension
+				else if (languageMode !== extension) throw new Error("Cannot mix javascript and typescript files")
 		
 				const source = await readFile(entryPath)
 				entries.push({source, name, path: "./" + entryPath.slice("source/".length)})
@@ -249,9 +258,11 @@ const FrogasaurusFrogasaurus = {}
 		
 			return entries
 		}
+		
 
 		FrogasaurusFrogasaurus["./file.js"].readFile = readFile
 		FrogasaurusFrogasaurus["./file.js"].writeFile = writeFile
+		FrogasaurusFrogasaurus["./file.js"].getLanguageMode = getLanguageMode
 		FrogasaurusFrogasaurus["./file.js"].readDirectory = readDirectory
 	}
 
@@ -402,7 +413,7 @@ const FrogasaurusFrogasaurus = {}
 	}
 
 	const { capitalise, trimStart } = FrogasaurusFrogasaurus["./string.js"]
-	const { readDirectory, writeFile } = FrogasaurusFrogasaurus["./file.js"]
+	const { getLanguageMode, readDirectory, writeFile } = FrogasaurusFrogasaurus["./file.js"]
 	const { parseExport, parseImport } = FrogasaurusFrogasaurus["./parse.js"]
 	const { RED, YELLOW, BLUE, GREEN } = FrogasaurusFrogasaurus["./colour.js"]
 	const { build } = FrogasaurusFrogasaurus["./build.js"]
