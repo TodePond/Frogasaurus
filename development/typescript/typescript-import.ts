@@ -39,8 +39,9 @@ const TypescriptFrogasaurus: any = {}
 //=========//
 // EXPORTS //
 //=========//
-export const { HELLO, greet } = TypescriptFrogasaurus["./greet.ts"]
-export const { main } = TypescriptFrogasaurus["./main.ts"]
+export const HELLO = TypescriptFrogasaurus["./greet.ts"].HELLO
+export const greet = TypescriptFrogasaurus["./greet.ts"].greet
+export const main = TypescriptFrogasaurus["./main.ts"].main
 
 export const Typescript = {
 	HELLO: TypescriptFrogasaurus["./greet.ts"].HELLO,

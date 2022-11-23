@@ -36,8 +36,8 @@ const JavascriptFrogasaurus = {}
 //=========//
 // EXPORTS //
 //=========//
-export const { greet } = JavascriptFrogasaurus["./greet.js"]
-export const { main } = JavascriptFrogasaurus["./main.js"]
+export const greet = JavascriptFrogasaurus["./greet.js"].greet
+export const main = JavascriptFrogasaurus["./main.js"].main
 
 export const Javascript = {
 	greet: JavascriptFrogasaurus["./greet.js"].greet,

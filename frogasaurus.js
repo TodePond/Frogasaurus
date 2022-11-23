@@ -127,7 +127,13 @@ const FrogasaurusFrogasaurus = {}
 				}
 			}
 		
-			const exportFooterLines = sourceResults.map(result => `export const { ${result.exportResults.map(exportResult => exportResult.name).join(", ")} } = ${fileConstantName}["${result.path}"]`)
+			const exportFooterLines = []
+			for (const result of sourceResults) {
+				for (const exportResult of result.exportResults) {
+					exportFooterLines.push(`export const ${exportResult.name} = ${fileConstantName}["${result.path}"].${exportResult.name}`)
+				}
+			}
+		
 			const exportFooterSource = exportFooterLines.join("\n")
 		
 			const globalFooterLines = [
