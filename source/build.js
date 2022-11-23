@@ -151,7 +151,6 @@ export const build = async (projectName, options) => {
 	}
 
 	const importFooterLines = []
-	console.log(sourceResults)
 	for (const [path, importList] of importLists.entries()) {
 		importFooterLines.push(`\tconst { ${[...importList.values()].join(", ")} } = ${fileConstantName}["${path}"]`)
 	}
