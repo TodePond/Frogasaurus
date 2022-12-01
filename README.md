@@ -26,7 +26,7 @@ An extra `-standalone.js` file will appear, that you can run in the command line
 
 ## How do I install it?
 
-Run (or upgrade) this command using [deno](https://deno.land/):
+Run this command using [deno](https://deno.land/):
 
 ```
 deno install --allow-write=. --allow-read=. --reload --force https://deno.land/x/frogasaurus/frogasaurus.js
