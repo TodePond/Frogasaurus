@@ -34,7 +34,7 @@ deno install --allow-write=. --allow-read=. --reload --force https://deno.land/x
 
 ## How do I use it?
 
-Check out the [quick Hello World guide](documentation/hello-world-short.md) (or other [guides](documentation/README.md)).
+Check out the [Hello World guide](documentation/hello-world.md) (or other [guides](documentation/README.md)).
 
 ## How do I build it?
 
