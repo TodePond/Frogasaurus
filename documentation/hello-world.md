@@ -84,4 +84,4 @@ hello
 
 ## Now what?
 
-Maybe... explore more [guides](guides.md)?
+Maybe... explore more [guides](/documentation)?
